@@ -42,7 +42,7 @@ Make sure the following are installed on your system:
 #### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/web-terminal-app.git
+git clone git@github.com:kamalesh0105/termix.git
 cd web-terminal-app
 ```
 ###  2️⃣ Install Dependencies & Start Development Servers
@@ -62,4 +62,8 @@ npm install
 npm run dev:server
 
 ```
+### Demo
+![Home Page](./client/src/assets/home.png)
+![Dashboard](./client/src/assets/terminal.png)
+
 
