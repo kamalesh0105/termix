@@ -32,7 +32,6 @@ Make sure the following are installed on your system:
 
 - [Node.js](https://nodejs.org/)
 - [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
 - [Git](https://git-scm.com/)
 
 ---
@@ -63,7 +62,11 @@ npm run dev:server
 
 ```
 ### Demo
+
+## Home
 ![Home Page](./client/src/assets/home.png)
+
+## Terminal
 ![Dashboard](./client/src/assets/terminal.png)
 
 
