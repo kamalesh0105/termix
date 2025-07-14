@@ -2,31 +2,20 @@ const pty = require('node-pty');
 const os = require('os');
 const dockerController = require('./docker');
 
-// Store active terminals
 const terminals = {};
 
-/**
- * Create a new terminal session
- * @param {string} sessionId - Unique session identifier
- * @param {string} containerId - Docker container ID
- * @returns {object} - Terminal process object
- */
 const createTerminal = async (sessionId, containerId) => {
-  // If terminal already exists for this session, return it
   if (terminals[sessionId]) {
     return terminals[sessionId];
   }
 
-  // Get container info to check if it's running
   const containerInfo = await dockerController.getContainerInfo(containerId);
   if (!containerInfo || containerInfo.State !== 'running') {
     await dockerController.startContainer(containerId);
   }
 
-  // Create shell using node-pty
   const shell = process.platform === 'win32' ? 'powershell.exe' : 'bash';
   
-  // Execute command in Docker container
   const term = pty.spawn('docker', ['exec', '-it', containerId, shell], {
     name: 'xterm-color',
     cols: 80,
@@ -35,18 +24,13 @@ const createTerminal = async (sessionId, containerId) => {
     env: process.env
   });
 
-  // Store terminal
   terminals[sessionId] = term;
   
   console.log(`Terminal created for session ${sessionId}`);
   return term;
 };
 
-/**
- * Resize terminal dimensions
- * @param {string} sessionId - Session identifier
- * @param {object} dimensions - Terminal dimensions (cols, rows)
- */
+
 const resizeTerminal = (sessionId, dimensions) => {
   const term = terminals[sessionId];
   if (term && dimensions) {
@@ -58,10 +42,7 @@ const resizeTerminal = (sessionId, dimensions) => {
   }
 };
 
-/**
- * End a terminal session
- * @param {string} sessionId - Session identifier
- */
+
 const endTerminal = (sessionId) => {
   const term = terminals[sessionId];
   if (term) {
@@ -75,9 +56,6 @@ const endTerminal = (sessionId) => {
   }
 };
 
-/**
- * Cleanup all terminal sessions
- */
 const cleanupAllTerminals = async () => {
   try {
     const sessionIds = Object.keys(terminals);
@@ -91,11 +69,7 @@ const cleanupAllTerminals = async () => {
   }
 };
 
-/**
- * Get terminal for a session
- * @param {string} sessionId - Session identifier
- * @returns {object|null} - Terminal process or null
- */
+
 const getTerminal = (sessionId) => {
   return terminals[sessionId] || null;
 };

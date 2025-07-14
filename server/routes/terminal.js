@@ -3,19 +3,13 @@ const router = express.Router();
 const dockerController = require('../controllers/docker');
 const terminalController = require('../controllers/terminal');
 
-/**
- * GET /api/terminal/sessions
- * Get list of all terminal sessions
- */
 router.get('/sessions', async (req, res) => {
   try {
-    // List all containers with our app label
     const containers = await dockerController.docker.listContainers({ 
       all: true,
       filters: { label: ['app=web-terminal'] } 
     });
     
-    // Map container info to session info
     const sessions = containers.map(container => {
       return {
         id: container.Labels.session,
@@ -32,21 +26,15 @@ router.get('/sessions', async (req, res) => {
   }
 });
 
-/**
- * POST /api/terminal/sessions/:id/end
- * End a terminal session
- */
+
 router.post('/sessions/:id/end', async (req, res) => {
   const { id } = req.params;
   
   try {
-    // End terminal process
     terminalController.endTerminal(id);
     
-    // Get container for this session
     const containerId = await dockerController.getContainerForSession(id);
     if (containerId) {
-      // Stop container but don't remove (allows session resuming)
       await dockerController.stopContainer(containerId);
     }
     
@@ -57,21 +45,14 @@ router.post('/sessions/:id/end', async (req, res) => {
   }
 });
 
-/**
- * POST /api/terminal/sessions/:id/remove
- * Remove a terminal session and its container
- */
 router.post('/sessions/:id/remove', async (req, res) => {
   const { id } = req.params;
   
   try {
-    // End terminal process
     terminalController.endTerminal(id);
     
-    // Get container for this session
     const containerId = await dockerController.getContainerForSession(id);
     if (containerId) {
-      // Remove container
       await dockerController.removeContainer(containerId);
     }
     
@@ -82,10 +63,6 @@ router.post('/sessions/:id/remove', async (req, res) => {
   }
 });
 
-/**
- * POST /api/terminal/cleanup
- * Clean up idle terminal sessions
- */
 router.post('/cleanup', async (req, res) => {
   try {
     const { idleTimeHours } = req.body;

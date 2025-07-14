@@ -1,14 +1,8 @@
 const Docker = require('dockerode');
 const docker = new Docker();
 
-/**
- * Get or create container for a session
- * @param {string} sessionId - Session identifier
- * @returns {string} - Container ID
- */
 const getContainerForSession = async (sessionId) => {
   try {
-    // List all containers with our app label
     const containers = await docker.listContainers({ 
       all: true,
       filters: { 
@@ -16,7 +10,6 @@ const getContainerForSession = async (sessionId) => {
       } 
     });
     
-    // Return container ID if found
     if (containers && containers.length > 0) {
       return containers[0].Id;
     }
@@ -28,16 +21,11 @@ const getContainerForSession = async (sessionId) => {
   }
 };
 
-/**
- * Create a new container for a session
- * @param {string} sessionId - Session identifier
- * @returns {string} - Container ID
- */
+
 const createContainer = async (sessionId) => {
   try {
     console.log(`Creating container for session ${sessionId}`);
     
-    // Create container with minimal Linux image
     const container = await docker.createContainer({
       Image: 'ubuntu:latest',
       Tty: true,
@@ -48,13 +36,13 @@ const createContainer = async (sessionId) => {
       AttachStderr: true,
       Cmd: ['/bin/bash'],
       HostConfig: {
-        AutoRemove: false, // Don't remove when stopped to allow resuming
+        AutoRemove: false,
         NetworkMode: 'bridge',
         Memory: 512 * 1024 * 1024, // 512MB memory limit
         MemorySwap: 1024 * 1024 * 1024, // 1GB swap
         CpuShares: 512, // CPU limit
       },
-      // Labels for identifying containers
+
       Labels: {
         app: 'web-terminal',
         session: sessionId,
@@ -62,10 +50,8 @@ const createContainer = async (sessionId) => {
       }
     });
     
-    // Start the container
     await container.start();
     
-    // Install basic packages
     const exec = await container.exec({
       Cmd: ['bash', '-c', 'apt-get update && apt-get install -y curl wget nano vim git htop'],
       AttachStdout: true,
@@ -80,10 +66,7 @@ const createContainer = async (sessionId) => {
   }
 };
 
-/**
- * Start a stopped container
- * @param {string} containerId - Container ID
- */
+
 const startContainer = async (containerId) => {
   try {
     const container = docker.getContainer(containerId);
@@ -96,10 +79,7 @@ const startContainer = async (containerId) => {
   }
 };
 
-/**
- * Stop a container
- * @param {string} containerId - Container ID
- */
+
 const stopContainer = async (containerId) => {
   try {
     const container = docker.getContainer(containerId);
@@ -112,11 +92,7 @@ const stopContainer = async (containerId) => {
   }
 };
 
-/**
- * Get container information
- * @param {string} containerId - Container ID
- * @returns {object} - Container info
- */
+
 const getContainerInfo = async (containerId) => {
   try {
     const container = docker.getContainer(containerId);
@@ -134,14 +110,10 @@ const getContainerInfo = async (containerId) => {
   }
 };
 
-/**
- * Remove container
- * @param {string} containerId - Container ID
- */
+
 const removeContainer = async (containerId) => {
   try {
     const container = docker.getContainer(containerId);
-    // Check if container is running
     const info = await container.inspect();
     if (info.State.Running) {
       await container.stop();
@@ -155,13 +127,8 @@ const removeContainer = async (containerId) => {
   }
 };
 
-/**
- * Cleanup idle containers
- * @param {number} idleTimeMs - Idle time in milliseconds
- */
 const cleanupIdleContainers = async (idleTimeMs = 24 * 60 * 60 * 1000) => {
   try {
-    // List all containers with our app label
     const containers = await docker.listContainers({ 
       all: true,
       filters: { label: ['app=web-terminal'] } 
@@ -171,15 +138,12 @@ const cleanupIdleContainers = async (idleTimeMs = 24 * 60 * 60 * 1000) => {
     
     for (const containerInfo of containers) {
       try {
-        // Get detailed container info
         const container = docker.getContainer(containerInfo.Id);
         const info = await container.inspect();
         
-        // Check if container is idle
         const createdDate = new Date(info.Created);
         const idleTime = now - createdDate;
         
-        // Remove if idle for too long
         if (idleTime > idleTimeMs) {
           console.log(`Removing idle container ${containerInfo.Id}`);
           await removeContainer(containerInfo.Id);
