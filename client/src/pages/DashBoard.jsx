@@ -7,7 +7,6 @@ const Dashboard = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    // Generate or retrieve session ID
     let currentSessionId = localStorage.getItem("terminal_session_id");
     if (!currentSessionId) {
       currentSessionId = uuidv4();

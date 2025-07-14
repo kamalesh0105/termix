@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section */}
       <section className="bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center">
@@ -80,7 +79,7 @@ const Hero = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      
       <section id="features" className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -93,7 +92,7 @@ const Hero = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1 */}
+
             <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="text-primary-500 mb-4">
                 <svg
@@ -120,7 +119,6 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Feature 2 */}
             <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="text-primary-500 mb-4">
                 <svg
@@ -147,7 +145,7 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Feature 3 */}
+
             <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="text-primary-500 mb-4">
                 <svg
@@ -173,8 +171,6 @@ const Hero = () => {
                 protected terminal access.
               </p>
             </div>
-
-            {/* Feature 4 */}
             <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="text-primary-500 mb-4">
                 <svg
@@ -200,8 +196,6 @@ const Hero = () => {
                 lose your work.
               </p>
             </div>
-
-            {/* Feature 5 */}
             <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="text-primary-500 mb-4">
                 <svg
@@ -228,7 +222,6 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Feature 6 */}
             <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="text-primary-500 mb-4">
                 <svg
@@ -258,7 +251,6 @@ const Hero = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-16 bg-primary-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">

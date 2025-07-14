@@ -45,17 +45,14 @@ const Terminal = ({ sessionId }) => {
       },
     });
 
-    // Add fit addon
     fitAddonRef.current = new FitAddon();
     xtermRef.current.loadAddon(fitAddonRef.current);
 
-    // Add web links addon for clickable links
+   
     xtermRef.current.loadAddon(new WebLinksAddon());
 
-    // Open terminal
     xtermRef.current.open(terminalRef.current);
 
-    // Initialize socket.io connection
     socketRef.current = io("http://localhost:3001", {
       transports: ["websocket"],
       upgrade: false,
@@ -64,7 +61,6 @@ const Terminal = ({ sessionId }) => {
       reconnectionDelay: 1000,
     });
 
-    // Set up socket events
     socketRef.current.on("connect", () => {
       console.log("Socket connected");
       setIsConnected(true);
@@ -78,11 +74,11 @@ const Terminal = ({ sessionId }) => {
 
       if (xtermRef.current) {
         xtermRef.current.clear();
-        // Focus terminal after session is created
+        
         setTimeout(() => {
           if (xtermRef.current) {
             xtermRef.current.focus();
-            // Fit terminal after focusing
+         
             if (fitAddonRef.current) {
               fitAddonRef.current.fit();
             }
@@ -115,15 +111,13 @@ const Terminal = ({ sessionId }) => {
         );
       }
     });
-
-    // Set up terminal input
     xtermRef.current.onData((data) => {
       if (isConnected && !isLoading && socketRef.current && isInitialized) {
         socketRef.current.emit("terminal-input", { sessionId, data });
       }
     });
 
-    // Handle resize
+    
     const handleResize = () => {
       if (fitAddonRef.current && xtermRef.current) {
         fitAddonRef.current.fit();
@@ -138,10 +132,9 @@ const Terminal = ({ sessionId }) => {
     };
 
     window.addEventListener("resize", handleResize);
-    // Initial fit
+    
     handleResize();
 
-    // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize);
 
@@ -156,7 +149,6 @@ const Terminal = ({ sessionId }) => {
     };
   }, [sessionId]);
 
-  // Handle terminal container click to focus
   const handleTerminalClick = () => {
     if (xtermRef.current && isInitialized) {
       xtermRef.current.focus();

@@ -13,8 +13,6 @@ const Navbar = () => {
         </div>
         <div className="[&>a]:px-3 [&>a]:py-1 [&>a]:rounded-md [&>a]:bg-gray-900 space-x-2">
           <a href="/">Home</a>
-          <a href="/docs">Documentation</a>
-          <a href="/signin">{isLoggedIn ? "Logout" : "Login"}</a>
           <a href="/dashboard">DashBoard</a>
         </div>
       </div>
